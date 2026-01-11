@@ -1,0 +1,9 @@
+@use "./base/clearDefault" as *;
+@use "./base/colors" as colors;
+@use "./base/typography" as *;
+
+body {
+    background-color: colors;
+    color: colors.$text-100;
+    font-family: text, sans-serif;
+}

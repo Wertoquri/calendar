@@ -1,0 +1,26 @@
+@use "../../styles/base/colors" as colors;
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    min-height: 3rem;
+    background-color: colors.$bg-200;
+    color: colors.$text-100;
+    padding-inline: 1rem;
+
+    & nav {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+        align-items: center;
+
+        & a.link{
+
+            text-decoration: none;
+            color: colors.$text-200;
+            display: flex;
+            align-self: center;
+            gap: 0.5rem;
+        }
+    }
+}
