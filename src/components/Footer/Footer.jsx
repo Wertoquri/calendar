@@ -3,8 +3,8 @@ import style from "./footer.module.scss"
 
 export default function Footer() {
   return (
-    <div>
-      Footer
-    </div>
+    <footer className={style.footer}>
+      <h3>&copy;Community of stupid programmers inc. All right is our {new Date().getFullYear}</h3>
+    </footer>
   )
 }

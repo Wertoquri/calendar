@@ -4,6 +4,12 @@
 
 body {
     background-color: colors;
-    color: colors.$text-100;
+    color: colors.$accent-200;
     font-family: text, sans-serif;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }

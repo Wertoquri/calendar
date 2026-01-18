@@ -3,8 +3,6 @@ import style from "./main.module.scss"
 
 export default function Main() {
   return (
-    <div>
-      Main
-    </div>
+    <main className={style.main}>Main</main>
   )
 }
