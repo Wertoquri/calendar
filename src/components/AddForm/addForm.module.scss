@@ -1,6 +1,7 @@
 @use "../../styles/base/colors" as colors;
 
 
+
 .wrapper{
     position: fixed;
     inset: 0;
@@ -24,6 +25,16 @@
                 color: red;
             }
         }
-        
+        position: relative;
+        & .closeButton {
+            position: absolute;
+            top: 0.3rem;
+            right: 0.3rem;
+            background: none;
+            border: none;
+            color: colors.$text-200;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
     }
 }

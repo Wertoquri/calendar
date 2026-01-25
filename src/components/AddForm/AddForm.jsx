@@ -1,7 +1,11 @@
-import {useEffect, useRef, useState} from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import style from "./addForm.module.scss"
+import { IoCloseSharp } from "react-icons/io5";
+import { useContext } from 'react'
+import { ContextStore } from '../../store/ContextStore.jsx';
 
-export default function AddForm() {
+
+export default function AddForm(props) {
     let [title, setTitle] = useState("")
     let [date, setDate] = useState("")
     let [time, setTime] = useState("")
@@ -13,13 +17,13 @@ export default function AddForm() {
         dateRef.current.style.display = "none"
         timeRef.current.style.display = "none"
 
-        if(title.length < 1){
+        if (title.length < 1) {
             titleRef.current.style.display = "block"
-        }else if(date.length < 1){
+        } else if (date.length < 1) {
             dateRef.current.style.display = "block"
-        }else if(time.length < 1){
+        } else if (time.length < 1) {
             timeRef.current.style.display = "block"
-        }else{
+        } else {
             setCorrect(true)
         }
     }, [title, date, time])
@@ -27,9 +31,25 @@ export default function AddForm() {
     let titleRef = useRef(null)
     let dateRef = useRef(null)
     let timeRef = useRef(null)
+
+    let { addEvent } =  useContext(ContextStore)
+
+
+    const handleSubmit = (e) => {
+        if (!correct) {
+            return
+        }
+        addEvent({ title, date, time, color })
+        props.open(false)
+    }
     return (
-        <div className={style.wrapper}>
+        <div className={style.wrapper} onClick={(e) => {
+            if (e.target === e.currentTarget) {
+                props.open(false)
+            }
+        }}>
             <div className={style.inner}>
+                <button className={style.closeButton} onClick={() => props.open(false)}><IoCloseSharp /></button>
                 <h1>Додати подію</h1>
                 <section>
                     <label htmlFor="title"> Назва події</label>
@@ -50,7 +70,7 @@ export default function AddForm() {
                     <label htmlFor="color"> Колір події</label>
                     <input type="color" name='color' id="color" value={color} onChange={e => setColor(e.target.value)} />
                 </section>
-                <button>Додати подію</button>
+                <button disabled={!correct} onClick={handleSubmit}>Додати подію</button>
             </div>
 
         </div>
