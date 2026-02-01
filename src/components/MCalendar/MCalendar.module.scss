@@ -1,0 +1,45 @@
+.wrapper {
+    & table {
+        border: 1px solid black;
+        margin: 2rem auto;
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+        border-collapse: collapse;
+
+        & td,
+        th {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+
+        & th {
+            background-color: rgba($color: #000000, $alpha: 0.3);
+            font-weight: 1000;
+        }
+
+        & td {
+            background-color: white;
+            position: relative;
+            padding: 2rem 0.5rem;
+
+            .number {
+                position: absolute;
+                top: 5px;
+                left: 5px;
+            }
+
+            &>button {
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 100px;
+                margin: 0;
+                border: none;
+                
+            }
+        }
+    }
+}

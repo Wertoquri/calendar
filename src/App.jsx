@@ -4,18 +4,21 @@ import Main from './components/Main/Main.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import AddForm from './components/AddForm/AddForm.jsx'
 import { LuCalendarPlus2 } from "react-icons/lu";
-import StorageProvider from './store/ContextStore.jsx'; 
+import StorageProvider from './store/ContextStore.jsx';
+import { BrowserRouter } from 'react-router-dom';
 
 export default function App() {
   let [modalIsOpen, setModalIsOpen] = useState(false)
   return (
-    <StorageProvider>
-      <Header/>
-      <Main/>
-      <Footer/>
-      {modalIsOpen && <AddForm open={setModalIsOpen}/>}
-      <button className='addButton' onClick={()=> setModalIsOpen(true)}><LuCalendarPlus2/></button>
-    </StorageProvider>
+    <BrowserRouter>
+      <StorageProvider>
+        <Header />
+        <Main />
+        <Footer />
+        {modalIsOpen && <AddForm open={setModalIsOpen} />}
+        <button className='addButton' onClick={() => setModalIsOpen(true)}><LuCalendarPlus2 /></button>
+      </StorageProvider>
+    </BrowserRouter>
   )
 }
 
