@@ -14,13 +14,13 @@ function Header(props) {
             <div className={style.iconBar}><IoCalendarNumberSharp />
                 <h3>My Calendar</h3></div>
             <nav>
-                <NavLink to="/" className={style.link}>
+                <NavLink to="/" className={({isActive}) => isActive ? style.active : style.link}>
                     Main</NavLink>
-                <NavLink to="/month" className={style.link}><BsCalendar2MonthFill />
+                <NavLink to="/month" className={({isActive}) => isActive ? style.active : style.link}><BsCalendar2MonthFill />
                     Month</NavLink>
-                <NavLink to="/week" className={style.link}><FaCalendarWeek />
+                <NavLink to="/week" className={({isActive}) => isActive ? style.active : style.link}><FaCalendarWeek />
                     Week</NavLink>
-                <NavLink to="/day" className={style.link}><FaCalendarDay />
+                <NavLink to="/day" className={({isActive}) => isActive ? style.active : style.link}><FaCalendarDay />
                     Day</NavLink>
             </nav>
         </header>

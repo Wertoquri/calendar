@@ -32,4 +32,9 @@
             font-size: 1.5rem;
         }
     }
+
+    & a.active {
+        color: colors.$primary-300;
+        text-decoration: none;
+    }
 }

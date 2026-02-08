@@ -1,0 +1,40 @@
+@use "../../styles/base/colors" as colors;
+
+
+
+.wrapper{
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    backdrop-filter: blur(2px);
+    & .inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+        background-color: colors.$bg-300;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        color: colors.$text-200;
+        box-shadow: 0 0 10px rgba($color: #000000, $alpha: 1);
+        & section {
+            display: flex;
+            flex-direction: column;
+            & .error {
+                color: red;
+            }
+        }
+        position: relative;
+        & .closeButton {
+            position: absolute;
+            top: 0.3rem;
+            right: 0.3rem;
+            background: none;
+            border: none;
+            color: colors.$text-200;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    }
+}

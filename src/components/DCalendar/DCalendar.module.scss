@@ -1,0 +1,15 @@
+.wrapper {
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 1rem auto;
+        max-width: 400px;
+    }
+
+    & .events {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+}
