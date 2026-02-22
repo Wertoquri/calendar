@@ -16,8 +16,8 @@ body {
 
 .addButton {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 3.5rem;
+    right: 3.5rem;
     height: 2.5rem;
     width: 2.5rem;
     border-radius: 100%;
@@ -28,4 +28,10 @@ body {
     display: grid;
     place-items: center;
     cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
 }
