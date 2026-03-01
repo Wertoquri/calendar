@@ -49,13 +49,14 @@
         background: #fbfdff;
         font-size: 0.98rem;
         color: #0b1220;
+        margin-bottom: 1rem;
         transition: box-shadow .15s ease, border-color .15s ease, transform .06s ease;
     }
 
     input:focus {
         outline: none;
         border-color: #7c3aed;
-        box-shadow: 0 6px 18px rgba(124,58,237,0.08);
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.08);
         transform: translateY(-1px);
     }
 
@@ -71,8 +72,8 @@
         margin-top: 0.35rem;
     }
 
-    & > form > button,
-    & .actions > button {
+    &>form>button,
+    & .actions>button {
         width: 100%;
         padding: 1rem;
         border-radius: 10px;
@@ -81,17 +82,17 @@
         font-weight: 600;
         color: white;
         background: linear-gradient(90deg, #7c3aed 0%, #4f46e5 100%);
-        box-shadow: 0 10px 20px rgba(79,70,229,0.12);
+        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.12);
         transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
     }
 
-    & > form > button:hover,
-    & .actions > button:hover {
+    &>form>button:hover,
+    & .actions>button:hover {
         transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(79,70,229,0.16);
+        box-shadow: 0 14px 28px rgba(79, 70, 229, 0.16);
     }
 
-    & > form > button[disabled] {
+    &>form>button[disabled] {
         opacity: 0.6;
         cursor: not-allowed;
         transform: none;
@@ -99,6 +100,14 @@
     }
 
     @media (max-width: 480px) {
-        & .card { padding: 1.25rem; }
+        & .card {
+            padding: 1.25rem;
+        }
+    }
+
+    h1{
+        text-align: center;
+        color: #0f1724;
+        margin-bottom: 1rem;
     }
 }
