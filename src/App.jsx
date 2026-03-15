@@ -6,8 +6,14 @@ import Modal from './components/Modal/Modal.jsx'
 import { LuCalendarPlus2 } from "react-icons/lu";
 import StorageProvider from './store/ContextStore.jsx';
 import { BrowserRouter } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { uploadTokenFromLocalStorage } from './store/AuthReducer.js';
 
 export default function App() {
+  let dispatch = useDispatch();
+  dispatch(uploadTokenFromLocalStorage());
+  let token = useSelector((state) => state.auth.token)
+  console.log(token)
   let [modalIsOpen, setModalIsOpen] = useState(false)
   return (
     <BrowserRouter>

@@ -6,22 +6,41 @@ import { FaCalendarDay } from "react-icons/fa6";
 import { BsCalendar2MonthFill } from "react-icons/bs";
 import { IoCalendarNumberSharp } from "react-icons/io5";
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {removeToken} from "../../store/AuthReducer.js"
+import { useDispatch } from 'react-redux';
 
 
 function Header(props) {
+    let isAuth = useSelector(state => state.auth.token) != null;
+    let dispatch = useDispatch();
+    let logout = () => {
+        dispatch(removeToken());
+    }
+
     return (
         <header className={style.wrapper}>
             <div className={style.iconBar}><IoCalendarNumberSharp />
                 <h3>My Calendar</h3></div>
             <nav>
-                <NavLink to="/" className={({isActive}) => isActive ? style.active : style.link}>
+                <NavLink to="/" className={({ isActive }) => isActive ? style.active : style.link}>
                     Main</NavLink>
-                <NavLink to="/month" className={({isActive}) => isActive ? style.active : style.link}><BsCalendar2MonthFill />
+                <NavLink to="/month" className={({ isActive }) => isActive ? style.active : style.link}><BsCalendar2MonthFill />
                     Month</NavLink>
-                <NavLink to="/week" className={({isActive}) => isActive ? style.active : style.link}><FaCalendarWeek />
+                <NavLink to="/week" className={({ isActive }) => isActive ? style.active : style.link}><FaCalendarWeek />
                     Week</NavLink>
-                <NavLink to="/day" className={({isActive}) => isActive ? style.active : style.link}><FaCalendarDay />
+                <NavLink to="/day" className={({ isActive }) => isActive ? style.active : style.link}><FaCalendarDay />
                     Day</NavLink>
+                {
+                    isAuth ? (
+                    <>
+                        <NavLink to="/login" className={({ isActive }) => isActive ? style.active : style.link}>Login</NavLink>
+                        <NavLink to="/register" className={({ isActive }) => isActive ? style.active : style.link}>Register</NavLink>
+                    </>
+                    ) : (
+                        <NavLink>Log out</NavLink>
+                   )
+                }
             </nav>
         </header>
     )
