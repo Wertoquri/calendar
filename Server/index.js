@@ -3,71 +3,145 @@ import cors from 'cors';
 import db from './db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: '*'
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
-}))
-
+// Register endpoint
 app.post('/register', async (req, res) => {
     let { login, password, email } = req.body;
-    try{
+    try {
         let result = await db.query("SELECT * FROM user WHERE login = ? OR email = ?", [login, email]);
-        if(result[0].length > 0){
-            return res.status(400).json({error: 'User with this login or email already exists'});
+        if (result[0].length > 0) {
+            return res.status(400).json({ error: 'User with this login or email already exists' });
         }
         let hashedPassword = await bcrypt.hash(password, 10);
         await db.query("INSERT INTO user (login, password, email) VALUES (?, ?, ?)", [login, hashedPassword, email]);
-        res.status(201).json({message: 'User registered successfully'});
-    }catch(err){
-        res.status(500).json({message: err});
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (err) {
+        console.error('Register error:', err);
+        res.status(500).json({ error: err.message || 'Server error' });
     }
 });
 
+// Login endpoint
 app.post("/login", async (req, res) => {
-    const {email, password} = req.body;
-    try{
+    const { email, password } = req.body;
+    try {
         let [users] = await db.query("SELECT * FROM user WHERE email = ?", [email]);
-        if(users.length === 0){
-            res.status(401).json({message: "invalid email or password"});
-            return;
+        if (users.length === 0) {
+            return res.status(401).json({ message: "Invalid email or password" });
         }
         let user = users[0];
         let isValidPassword = await bcrypt.compare(password, user.password);
-        if(!isValidPassword){
-            res.status(401).json({message: "invalid email or password"});
-            return;
+        if (!isValidPassword) {
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        let token = jwt.sign({id: user.id}, process.env.SECRET, {expiresIn: '14d'})
-        res.status(200).json({token});
-    }catch(err){
-        res.status(500).json({message: 'Server error'});
+        let token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET, { expiresIn: '14d' });
+        res.status(200).json({ token, user: { id: user.id, email: user.email, login: user.login } });
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ message: 'Server error' });
     }
-
 });
 
-const authenticateToken = (req, res, next) => {
+// Middleware to authenticate token
+const authenticateToken = async (req, res, next) => {
     let authHeader = req.headers.authorization;
     let token = authHeader && authHeader.split(' ')[1];
-    if(!token){
-        return res.status(403).json({error: "No token provided"});
+    if (!token) {
+        return res.status(403).json({ error: "No token provided" });
     }
-    jwt.verify(token, process.env.SECRET, (err, user) => {
-        if(err){
-            return res.status(403).json({error: "Invalid token"});
-        }
+    try {
+        let user = jwt.verify(token, process.env.SECRET);
         req.user = user;
         next();
-    });
-    
-}
+    } catch (err) {
+        return res.status(403).json({ error: "Invalid token" });
+    }
+};
 
-app.get("/protected", authenticateToken, (req, res) => {
-    res.json({data: req?.user?.id});
+// Get all events for authenticated user
+app.get('/events', authenticateToken, async (req, res) => {
+    try {
+        let [events] = await db.query("SELECT * FROM events WHERE user_id = ? ORDER BY date DESC", [req.user.id]);
+        res.status(200).json({ events });
+    } catch (err) {
+        console.error('Get events error:', err);
+        res.status(500).json({ error: err.message || 'Server error' });
+    }
 });
 
-app.listen(3000,()=>console.log(`Server is running on port 3000`));
+// Create new event
+app.post('/events', authenticateToken, async (req, res) => {
+    let { title, date, time, color } = req.body;
+    try {
+        let result = await db.query(
+            "INSERT INTO events (user_id, title, date, time, color) VALUES (?, ?, ?, ?, ?)",
+            [req.user.id, title, date, time || '00:00', color || '#6366f1']
+        );
+        let newEvent = {
+            id: result[0].insertId,
+            user_id: req.user.id,
+            title,
+            date,
+            time: time || '00:00',
+            color: color || '#6366f1'
+        };
+        res.status(201).json({ event: newEvent });
+    } catch (err) {
+        console.error('Create event error:', err);
+        res.status(500).json({ error: err.message || 'Server error' });
+    }
+});
+
+// Delete event
+app.delete('/events/:id', authenticateToken, async (req, res) => {
+    let eventId = req.params.id;
+    try {
+        let [result] = await db.query("DELETE FROM events WHERE id = ? AND user_id = ?", [eventId, req.user.id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        res.status(200).json({ message: 'Event deleted successfully', id: eventId });
+    } catch (err) {
+        console.error('Delete event error:', err);
+        res.status(500).json({ error: err.message || 'Server error' });
+    }
+});
+
+// Update event
+app.put('/events/:id', authenticateToken, async (req, res) => {
+    let eventId = req.params.id;
+    let { title, date, time, color } = req.body;
+    try {
+        let [result] = await db.query(
+            "UPDATE events SET title = ?, date = ?, time = ?, color = ? WHERE id = ? AND user_id = ?",
+            [title, date, time, color, eventId, req.user.id]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        res.status(200).json({ message: 'Event updated successfully' });
+    } catch (err) {
+        console.error('Update event error:', err);
+        res.status(500).json({ error: err.message || 'Server error' });
+    }
+});
+
+// Protected route example
+app.get("/protected", authenticateToken, (req, res) => {
+    res.json({ data: req.user });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

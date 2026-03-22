@@ -1,30 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './components/Header/Header.jsx'
 import Main from './components/Main/Main.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import Modal from './components/Modal/Modal.jsx'
 import { LuCalendarPlus2 } from "react-icons/lu";
-import StorageProvider from './store/ContextStore.jsx';
-import { BrowserRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { uploadTokenFromLocalStorage } from './store/AuthReducer.js';
+import { uploadTokenFromLocalStorage, fetchEvents } from './store/AuthReducer.js';
+import { BrowserRouter } from 'react-router-dom';
 
 export default function App() {
-  let dispatch = useDispatch();
-  dispatch(uploadTokenFromLocalStorage());
-  let token = useSelector((state) => state.auth.token)
-  console.log(token)
-  let [modalIsOpen, setModalIsOpen] = useState(false)
-  return (
-    <BrowserRouter>
-      <StorageProvider>
-        <Header />
-        <Main />
-        <Footer />
-        {modalIsOpen && <Modal open={setModalIsOpen} />}
-        <button className='addButton' onClick={() => setModalIsOpen(true)}><LuCalendarPlus2 /></button>
-      </StorageProvider>
-    </BrowserRouter>
-  )
+    const dispatch = useDispatch();
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const token = useSelector((state) => state.auth.token);
+
+    useEffect(() => {
+        // Upload token from localStorage on app start
+        dispatch(uploadTokenFromLocalStorage());
+    }, [dispatch]);
+
+    useEffect(() => {
+        // Fetch events when token is available
+        if (token) {
+            dispatch(fetchEvents());
+        }
+    }, [token, dispatch]);
+
+    return (
+        <BrowserRouter>
+            <Header />
+            <Main />
+            <Footer />
+            {modalIsOpen && <Modal open={setModalIsOpen} setOpen={setModalIsOpen} />}
+            <button className='addButton' onClick={() => setModalIsOpen(true)}>
+                <LuCalendarPlus2 />
+            </button>
+        </BrowserRouter>
+    )
 }
 

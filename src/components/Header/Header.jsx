@@ -4,17 +4,20 @@ import { FaCalendarWeek } from "react-icons/fa";
 import { FaCalendarDay } from "react-icons/fa6";
 import { BsCalendar2MonthFill } from "react-icons/bs";
 import { IoCalendarNumberSharp } from "react-icons/io5";
-import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import {removeToken} from "../../store/AuthReducer.js"
-import { useDispatch } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeToken, uploadTokenFromLocalStorage } from "../../store/AuthReducer.js"
 
 
 function Header() {
-    let isAuth = useSelector(state => state.auth.token) != null;
-    let dispatch = useDispatch();
-    let logout = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const token = useSelector(state => state.auth.token);
+    const isAuth = token != null;
+
+    const logout = () => {
         dispatch(removeToken());
+        navigate('/');
     }
 
     return (
@@ -48,9 +51,17 @@ function Header() {
                             <NavLink to="/register" className={({ isActive }) => isActive ? style.active : style.link}>
                                 <span>Register</span>
                             </NavLink>
+                            <button onClick={logout}>Log out</button>
                         </>
                     ) : (
-                        <button onClick={logout}>Log out</button>
+                        <>
+                            <NavLink to="/login" className={({ isActive }) => isActive ? style.active : style.link}>
+                                <span>Login</span>
+                            </NavLink>
+                            <NavLink to="/register" className={({ isActive }) => isActive ? style.active : style.link}>
+                                <span>Register</span>
+                            </NavLink>
+                        </>
                     )
                 }
             </nav>
