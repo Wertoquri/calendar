@@ -71,7 +71,7 @@ export default function Login() {
                         </div>
                     )}
                     
-                    <button type="submit" disabled={loading}>
+                    <button type="submit" disabled={loading} className={style.button}>
                         {loading ? 'Signing in...' : 'Sign In'} 
                         <IoLogIn style={{ width: '20px', height: '20px', flexShrink: '0' }} />
                     </button>

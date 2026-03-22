@@ -113,7 +113,7 @@ export default function Register() {
                         </div>
                     )}
 
-                    <button type="submit" disabled={loading}>
+                    <button type="submit" disabled={loading} className={style.button}>
                         {loading ? 'Creating Account...' : 'Create Account'} 
                         <IoPersonAdd style={{ width: '20px', height: '20px', flexShrink: '0' }} />
                     </button>
