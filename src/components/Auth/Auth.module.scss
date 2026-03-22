@@ -126,8 +126,10 @@
         gap: 0.75rem;
 
         & .btn-icon {
-            font-size: 1.25rem;
-            transition: transform 0.3s ease;
+            font-size: 1.25rem !important;
+            transition: transform 0.3s ease !important;
+            display: inline-flex;
+            align-items: center;
         }
 
         &:hover {
@@ -135,7 +137,7 @@
             box-shadow: 0 14px 35px rgba(99, 102, 241, 0.45);
 
             & .btn-icon {
-                transform: translateX(4px);
+                transform: translateX(4px) !important;
             }
         }
 
