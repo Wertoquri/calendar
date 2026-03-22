@@ -1,11 +1,22 @@
-$primary-100:#6c35de;
-$primary-200:#a364ff;
-$primary-300:#ffc7ff;
-$accent-100:#cb80ff;
-$accent-200:#373737;
-$text-100:#ffffff;
-$text-200:#e0e0e0;
-$bg-100:#241b35;
-$bg-200:#342a45;
-$bg-300:#4d425f;
+// Modern gradient palette - Deep Space Theme
+$primary-100: #6366f1;      // Indigo
+$primary-200: #8b5cf6;      // Violet
+$primary-300: #d946ef;      // Fuchsia
+$accent-100: #22d3ee;       // Cyan
+$accent-200: #f472b6;       // Pink
+$text-100: #ffffff;
+$text-200: #e2e8f0;
+$text-muted: #94a3b8;
+$bg-100: #0f172a;           // Slate 900
+$bg-200: #1e293b;           // Slate 800
+$bg-300: #334155;           // Slate 700
+$bg-card: rgba(51, 65, 85, 0.5);
+$success: #22c55e;
+$warning: #f59e0b;
+$error: #ef4444;
+
+// Gradients
+$gradient-primary: linear-gradient(135deg, $primary-100 0%, $primary-300 100%);
+$gradient-accent: linear-gradient(135deg, $accent-100 0%, $accent-200 100%);
+$gradient-dark: linear-gradient(180deg, $bg-100 0%, $bg-200 100%);
       

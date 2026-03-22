@@ -2,36 +2,68 @@
 @use "./base/colors" as colors;
 @use "./base/typography" as *;
 
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: colors;
-    color: colors.$accent-200;
-    font-family: text, sans-serif;
+    background: colors.$gradient-dark;
+    color: colors.$text-100;
+    font-family: 'text', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 #root {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
+// Modern Floating Action Button
 .addButton {
     position: fixed;
-    bottom: 3.5rem;
-    right: 3.5rem;
-    height: 2.5rem;
-    width: 2.5rem;
-    border-radius: 100%;
+    bottom: 2rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
     border: none;
-    background-color: colors.$bg-300;
+    background: colors.$gradient-primary;
     color: colors.$text-100;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     display: grid;
     place-items: center;
     cursor: pointer;
-    transition: transform .12s ease, box-shadow .12s ease;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
 
     &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: colors.$bg-100;
+}
+
+::-webkit-scrollbar-thumb {
+    background: colors.$bg-300;
+    border-radius: 4px;
+
+    &:hover {
+        background: colors.$primary-200;
     }
 }
