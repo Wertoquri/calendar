@@ -115,7 +115,7 @@ export default function Register() {
 
                     <button type="submit" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Create Account'} 
-                        <IoPersonAdd style={{ verticalAlign: 'middle', marginLeft: '0.5rem' }} />
+                        <IoPersonAdd />
                     </button>
                 </form>
             </div>

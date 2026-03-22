@@ -109,7 +109,7 @@
     & > form > button,
     & .actions > button {
         width: 100%;
-        padding: 1rem;
+        padding: 1rem 1.5rem;
         border-radius: 0.875rem;
         border: none;
         cursor: pointer;
@@ -120,14 +120,31 @@
         box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+
+        & svg {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
 
         &:hover {
             transform: translateY(-3px);
             box-shadow: 0 14px 35px rgba(99, 102, 241, 0.45);
+
+            & svg {
+                transform: translateX(4px);
+            }
         }
 
         &:active {
             transform: translateY(-1px);
+
+            & svg {
+                transform: translateX(2px);
+            }
         }
 
         &:disabled {
@@ -135,6 +152,10 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+
+            & svg {
+                transform: none;
+            }
         }
     }
 

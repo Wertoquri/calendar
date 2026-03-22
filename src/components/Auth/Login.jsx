@@ -73,7 +73,7 @@ export default function Login() {
                     
                     <button type="submit" disabled={loading}>
                         {loading ? 'Signing in...' : 'Sign In'} 
-                        <IoLogIn style={{ verticalAlign: 'middle', marginLeft: '0.5rem' }} />
+                        <IoLogIn />
                     </button>
                 </form>
             </div>
