@@ -124,12 +124,16 @@
         align-items: center;
         justify-content: center;
         gap: 0.75rem;
+        text-align: center;
 
         & .btn-icon {
-            font-size: 1.25rem !important;
-            transition: transform 0.3s ease !important;
+            width: 1.25rem;
+            height: 1.25rem;
+            min-width: 1.25rem;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
         }
 
         &:hover {
@@ -137,7 +141,7 @@
             box-shadow: 0 14px 35px rgba(99, 102, 241, 0.45);
 
             & .btn-icon {
-                transform: translateX(4px) !important;
+                transform: translateX(4px);
             }
         }
 
