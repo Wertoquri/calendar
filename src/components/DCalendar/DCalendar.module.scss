@@ -1,15 +1,289 @@
+@use "../../styles/base/colors" as colors;
+
 .wrapper {
-    .container {
+    padding: 2rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+
+    .header {
         display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        margin: 1rem auto;
-        max-width: 400px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 1.5rem;
+        background: rgba(51, 65, 85, 0.5);
+        border-radius: 1rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            background: colors.$gradient-primary;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navButtons {
+            display: flex;
+            gap: 0.5rem;
+
+            button {
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 0.5rem;
+                background: rgba(99, 102, 241, 0.2);
+                color: colors.$text-100;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: colors.$gradient-primary;
+                    transform: translateY(-2px);
+                }
+            }
+        }
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .dayInfo {
+        background: rgba(51, 65, 85, 0.4);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 1rem;
+
+        .dayName {
+            display: block;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: colors.$text-muted;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .dayNumber {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 2.5rem;
+            background: colors.$gradient-primary;
+            color: colors.$text-100;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        &.today {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: colors.$primary-100;
+        }
     }
 
-    & .events {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
+    .timeline {
+        position: relative;
+        padding-left: 5rem;
+
+        .timeSlot {
+            position: relative;
+            padding: 1.5rem 0;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            margin-left: 1rem;
+            background: linear-gradient(
+                135deg,
+                rgba(99, 102, 241, 0.03) 0%,
+                rgba(139, 92, 246, 0.02) 50%,
+                rgba(217, 70, 239, 0.03) 100%
+            );
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: -6px;
+                top: 1.75rem;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, colors.$primary-200, colors.$primary-300);
+                border: 2px solid colors.$primary-200;
+                box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+                z-index: 1;
+            }
+
+            &:hover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(99, 102, 241, 0.08) 0%,
+                    rgba(139, 92, 246, 0.05) 50%,
+                    rgba(217, 70, 239, 0.08) 100%
+                );
+                transform: translateX(4px);
+                box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+            }
+
+            .timeLabel {
+                position: absolute;
+                left: -4.5rem;
+                top: 1.75rem;
+                font-size: 0.85rem;
+                color: colors.$text-muted;
+                transform: translateY(-50%);
+                font-weight: 500;
+            }
+
+            .event {
+                width: calc(100% - 1rem);
+                margin-left: 1rem;
+                padding: 1.25rem 1.5rem;
+                border-radius: 1rem;
+                border: none;
+                border-left: 5px solid;
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(255, 255, 255, 0.05) 100%
+                );
+                color: colors.$text-100;
+                cursor: pointer;
+                text-align: left;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                backdrop-filter: blur(10px);
+                position: relative;
+                overflow: hidden;
+                box-shadow: 
+                    0 4px 15px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(
+                        135deg,
+                        rgba(99, 102, 241, 0.1) 0%,
+                        rgba(217, 70, 239, 0.1) 100%
+                    );
+                    opacity: 0;
+                    transition: opacity 0.4s ease;
+                    z-index: -1;
+                }
+
+                &:hover {
+                    transform: translateX(8px) scale(1.02);
+                    background: linear-gradient(
+                        135deg,
+                        rgba(255, 255, 255, 0.15) 0%,
+                        rgba(255, 255, 255, 0.08) 100%
+                    );
+                    box-shadow: 
+                        0 8px 25px rgba(99, 102, 241, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+                    border-left-width: 7px;
+
+                    &::before {
+                        opacity: 1;
+                    }
+                }
+
+                .eventHeader {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 0.75rem;
+
+                    .eventTitle {
+                        font-weight: 600;
+                        font-size: 1.05rem;
+                        letter-spacing: 0.3px;
+                    }
+
+                    .eventColor {
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+                    }
+                }
+
+                .eventTime {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 0.85rem;
+                    color: colors.$text-muted;
+                    padding: 0.35rem 0.85rem;
+                    background: rgba(255, 255, 255, 0.08);
+                    border-radius: 1.25rem;
+                    font-weight: 500;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                }
+            }
+        }
+    }
+
+    .noEvents {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: colors.$text-muted;
+
+        svg {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        span {
+            font-size: 0.9rem;
+            color: colors.$text-muted;
+        }
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .wrapper {
+        padding: 1rem;
+
+        .header {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    }
+
+    .container .timeline {
+        padding-left: 3.5rem;
+
+        .timeSlot .timeLabel {
+            left: -3rem;
+            font-size: 0.75rem;
+        }
     }
 }

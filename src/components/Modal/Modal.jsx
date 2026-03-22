@@ -1,92 +1,112 @@
-import { use, useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import style from "./Modal.module.scss"
 import { IoCloseSharp } from "react-icons/io5";
-import { useContext } from 'react'
-import { ContextStore } from '../../store/ContextStore.jsx';
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
-import { addEvent} from "../../store/EventsReducer.js";
+import { useDispatch, useSelector } from 'react-redux';
+import { addEvent } from "../../store/EventsReducer.js";
 
 
-export default function Modal(props) {
-    let dispatch = useDispatch();
+export default function Modal({ open, setOpen }) {
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector(state => state.events);
 
-    let { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        defaultValues: {
+            title: '',
+            date: '',
+            time: '',
+            color: '#6366f1'
+        }
+    })
 
-    const submit = (data) => {
-        console.log(data)
-        dispatch(addEvent(data))
-        props.open(false)
-        reset()
+    const submit = async (data) => {
+        try {
+            await dispatch(addEvent(data)).unwrap();
+            setOpen(false);
+            reset();
+        } catch (err) {
+            console.error('Failed to add event:', err);
+            alert('Failed to add event: ' + err);
+        }
     }
 
     return (
         <div className={style.wrapper} onClick={(e) => {
             if (e.target === e.currentTarget) {
-                props.open(false)
+                setOpen(false)
             }
         }}>
             <form onSubmit={handleSubmit(submit)} className={style.inner}>
-                <button className={style.closeButton} onClick={() => props.open(false)}><IoCloseSharp /></button>
-                <h1>Додати подію</h1>
+                <button type="button" className={style.closeButton} onClick={() => setOpen(false)}>
+                    <IoCloseSharp />
+                </button>
+                <h1>Add Event</h1>
+                
                 <section>
-                    <label htmlFor="title"> Назва події</label>
-                    <input type="text" name='title' id="title" {...register("title", {
-                        required: true,
-                        minLength: 3,
-                        maxLength: 40,
-                        pattern: {
-                            value: /^[a-zA-Z0-9\s]*$/,
-                            message: "Only letters, numbers and spaces are allowed"
-                        },
-                        message: "Invalid title"
-                    })} />
-
-                </section>
-                <section>
-                    <label htmlFor="date"> Дата події</label>
-                    <input type="date" name='date' id="date" {...register("date"
-                        , {
-                            required: {
-                                value: true,
-                                message: "Date is required"
+                    <label htmlFor="title">Event Title</label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        placeholder="Enter event title"
+                        {...register("title", {
+                            required: "Title is required",
+                            minLength: {
+                                value: 3,
+                                message: "Min length 3 characters"
                             },
-
-                        }
-                    )} />
-
+                            maxLength: {
+                                value: 40,
+                                message: "Max length 40 characters"
+                            }
+                        })} 
+                    />
+                    {errors.title && <span className={style.error}>{errors.title.message}</span>}
                 </section>
+
                 <section>
-                    <label htmlFor="time"> Час події</label>
-                    <input type="time" name='time' id="time" {...register("time", {
-                        required: {
-                            value: true,
-                            message: "Time is required"
-                        }
-
-                    })} />
-
+                    <label htmlFor="date">Date</label>
+                    <input 
+                        type="date" 
+                        id="date" 
+                        {...register("date", {
+                            required: "Date is required"
+                        })} 
+                    />
+                    {errors.date && <span className={style.error}>{errors.date.message}</span>}
                 </section>
+
                 <section>
-                    <label htmlFor="color"> Колір події</label>
-                    <input type="color" name='color' id="color" {...register("color"
-                        , {
-                            value: "#000000"
-                        }
-                    )
+                    <label htmlFor="time">Time</label>
+                    <input 
+                        type="time" 
+                        id="time" 
+                        {...register("time", {
+                            required: "Time is required"
+                        })} 
+                    />
+                    {errors.time && <span className={style.error}>{errors.time.message}</span>}
+                </section>
 
-                    } />
-                </section>
                 <section>
-                    {(errors.title || errors.date || errors.time) && (<span className={style.error}>
-                        {errors.title?.message}
-                        {errors.date?.message}
-                        {errors.time?.message}
-                    </span>)}
+                    <label htmlFor="color">Color</label>
+                    <input 
+                        type="color" 
+                        id="color" 
+                        {...register("color")}
+                        defaultValue="#6366f1"
+                    />
                 </section>
-                <button type="submit" >Додати подію</button>
+
+                {error && (
+                    <section>
+                        <span className={style.error}>{error}</span>
+                    </section>
+                )}
+
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Adding...' : 'Add Event'}
+                </button>
             </form>
-
         </div>
     )
 }

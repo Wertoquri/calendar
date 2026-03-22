@@ -1,63 +1,94 @@
+@use "../../styles/base/colors" as colors;
+
 .wrapper {
     display: grid;
     place-items: center;
     min-height: 90vh;
     padding: 2rem;
-    background: linear-gradient(180deg, #f6f8fb 0%, #eef2f7 100%);
+    background: colors.$gradient-dark;
 
-    & .card {
+    .card {
         width: 100%;
-        max-width: 420px;
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 8px 24px rgba(20, 30, 50, 0.08);
+        max-width: 450px;
+        background: rgba(51, 65, 85, 0.6);
+        backdrop-filter: blur(20px);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.25rem;
         align-items: stretch;
+        animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     }
 
+    & h1,
     & h2 {
-        margin: 0 0 0.25rem 0;
-        font-size: 1.25rem;
-        color: #0f1724;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.75rem;
+        background: colors.$gradient-primary;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         text-align: center;
+        font-weight: 700;
     }
 
     & p.subtle {
         margin: 0 0 1rem 0;
         font-size: 0.9rem;
-        color: #6b7280;
+        color: colors.$text-muted;
         text-align: center;
     }
 
     label {
-        font-size: 0.9rem;
-        color: #111827;
-        margin-bottom: 0.35rem;
+        font-size: 0.85rem;
+        color: colors.$text-muted;
+        margin-bottom: 0.5rem;
         display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
     }
 
     input[type="text"],
     input[type="email"],
     input[type="password"] {
         width: 100%;
-        padding: 0.7rem 0.85rem;
-        border: 1px solid #e6e9ef;
-        border-radius: 8px;
-        background: #fbfdff;
-        font-size: 0.98rem;
-        color: #0b1220;
-        margin-bottom: 1rem;
-        transition: box-shadow .15s ease, border-color .15s ease, transform .06s ease;
-    }
-
-    input:focus {
+        padding: 0.875rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0.875rem;
+        background: rgba(15, 23, 42, 0.5);
+        font-size: 1rem;
+        color: colors.$text-100;
+        margin-bottom: 0.25rem;
+        transition: all 0.3s ease;
         outline: none;
-        border-color: #7c3aed;
-        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.08);
-        transform: translateY(-1px);
+
+        &:focus {
+            border-color: colors.$primary-200;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            background: rgba(15, 23, 42, 0.7);
+            transform: translateY(-1px);
+        }
+
+        &::placeholder {
+            color: colors.$text-muted;
+        }
     }
 
     .row {
@@ -67,47 +98,84 @@
     }
 
     .error {
-        color: #b91c1c;
-        font-size: 0.85rem;
+        color: colors.$error;
+        font-size: 0.8rem;
         margin-top: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    &>form>button,
-    & .actions>button {
+    .button {
         width: 100%;
-        padding: 1rem;
-        border-radius: 10px;
+        padding: 1rem 1.5rem;
+        border-radius: 0.875rem;
         border: none;
         cursor: pointer;
         font-weight: 600;
-        color: white;
-        background: linear-gradient(90deg, #7c3aed 0%, #4f46e5 100%);
-        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.12);
-        transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
-    }
+        font-size: 1rem;
+        color: colors.$text-100;
+        background: colors.$gradient-primary;
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        text-align: center;
 
-    &>form>button:hover,
-    & .actions>button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(79, 70, 229, 0.16);
-    }
+        & svg {
+            width: 20px !important;
+            height: 20px !important;
+            min-width: 20px !important;
+            min-height: 20px !important;
+            flex-shrink: 0;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: transform 0.3s ease;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
 
-    &>form>button[disabled] {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(99, 102, 241, 0.45);
+
+            & svg {
+                transform: translateX(4px);
+            }
+        }
+
+        &:active {
+            transform: translateY(-1px);
+
+            & svg {
+                transform: translateX(2px);
+            }
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+
+            & svg {
+                transform: none;
+            }
+        }
     }
 
     @media (max-width: 480px) {
         & .card {
-            padding: 1.25rem;
+            padding: 1.75rem;
         }
-    }
 
-    h1{
-        text-align: center;
-        color: #0f1724;
-        margin-bottom: 1rem;
+        & h1,
+        & h2 {
+            font-size: 1.5rem;
+        }
     }
 }
