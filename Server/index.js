@@ -70,4 +70,4 @@ app.get("/protected", authenticateToken, (req, res) => {
     res.json({data: req?.user?.id});
 });
 
-app.listen(3000,()=>console.log('Server is running on port 3000'));
+app.listen(3000,()=>console.log(`Server is running on port 3000`));
