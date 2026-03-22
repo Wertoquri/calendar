@@ -5,7 +5,8 @@ import Footer from './components/Footer/Footer.jsx'
 import Modal from './components/Modal/Modal.jsx'
 import { LuCalendarPlus2 } from "react-icons/lu";
 import { useSelector, useDispatch } from 'react-redux';
-import { uploadTokenFromLocalStorage, fetchEvents } from './store/AuthReducer.js';
+import { uploadTokenFromLocalStorage } from './store/AuthReducer.js';
+import { fetchEvents } from './store/EventsReducer.js';
 import { BrowserRouter } from 'react-router-dom';
 
 export default function App() {

@@ -1,3 +1,4 @@
+-- Active: 1771174971346@@127.0.0.1@3306@webcalendar
 -- Create database if not exists
 CREATE DATABASE IF NOT EXISTS webcalendar;
 USE webcalendar;
