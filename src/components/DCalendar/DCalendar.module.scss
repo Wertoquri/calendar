@@ -97,45 +97,77 @@
 
         .timeSlot {
             position: relative;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             border-left: 2px solid rgba(255, 255, 255, 0.1);
             margin-left: 1rem;
+            background: linear-gradient(
+                135deg,
+                rgba(99, 102, 241, 0.03) 0%,
+                rgba(139, 92, 246, 0.02) 50%,
+                rgba(217, 70, 239, 0.03) 100%
+            );
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
             &::before {
                 content: '';
                 position: absolute;
                 left: -6px;
-                top: 1.25rem;
+                top: 1.75rem;
                 width: 10px;
                 height: 10px;
                 border-radius: 50%;
-                background: colors.$bg-300;
+                background: linear-gradient(135deg, colors.$primary-200, colors.$primary-300);
                 border: 2px solid colors.$primary-200;
+                box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+                z-index: 1;
+            }
+
+            &:hover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(99, 102, 241, 0.08) 0%,
+                    rgba(139, 92, 246, 0.05) 50%,
+                    rgba(217, 70, 239, 0.08) 100%
+                );
+                transform: translateX(4px);
+                box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
             }
 
             .timeLabel {
                 position: absolute;
                 left: -4.5rem;
-                top: 1rem;
+                top: 1.75rem;
                 font-size: 0.85rem;
                 color: colors.$text-muted;
                 transform: translateY(-50%);
+                font-weight: 500;
             }
 
             .event {
-                width: 100%;
-                padding: 1rem 1.25rem;
-                border-radius: 0.75rem;
+                width: calc(100% - 1rem);
+                margin-left: 1rem;
+                padding: 1.25rem 1.5rem;
+                border-radius: 1rem;
                 border: none;
                 border-left: 5px solid;
-                background: rgba(255, 255, 255, 0.08);
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(255, 255, 255, 0.05) 100%
+                );
                 color: colors.$text-100;
                 cursor: pointer;
                 text-align: left;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                backdrop-filter: blur(5px);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                backdrop-filter: blur(10px);
                 position: relative;
                 overflow: hidden;
+                box-shadow: 
+                    0 4px 15px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
                 &::before {
                     content: '';
@@ -144,15 +176,27 @@
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+                    background: linear-gradient(
+                        135deg,
+                        rgba(99, 102, 241, 0.1) 0%,
+                        rgba(217, 70, 239, 0.1) 100%
+                    );
                     opacity: 0;
-                    transition: opacity 0.3s ease;
+                    transition: opacity 0.4s ease;
+                    z-index: -1;
                 }
 
                 &:hover {
-                    transform: translateX(8px);
-                    background: rgba(255, 255, 255, 0.12);
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                    transform: translateX(8px) scale(1.02);
+                    background: linear-gradient(
+                        135deg,
+                        rgba(255, 255, 255, 0.15) 0%,
+                        rgba(255, 255, 255, 0.08) 100%
+                    );
+                    box-shadow: 
+                        0 8px 25px rgba(99, 102, 241, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+                    border-left-width: 7px;
 
                     &::before {
                         opacity: 1;
@@ -163,17 +207,19 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 0.5rem;
+                    margin-bottom: 0.75rem;
 
                     .eventTitle {
                         font-weight: 600;
-                        font-size: 1rem;
+                        font-size: 1.05rem;
+                        letter-spacing: 0.3px;
                     }
 
                     .eventColor {
-                        width: 12px;
-                        height: 12px;
+                        width: 14px;
+                        height: 14px;
                         border-radius: 50%;
+                        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
                     }
                 }
 
@@ -183,9 +229,11 @@
                     gap: 0.5rem;
                     font-size: 0.85rem;
                     color: colors.$text-muted;
-                    padding: 0.25rem 0.75rem;
-                    background: rgba(255, 255, 255, 0.05);
-                    border-radius: 1rem;
+                    padding: 0.35rem 0.85rem;
+                    background: rgba(255, 255, 255, 0.08);
+                    border-radius: 1.25rem;
+                    font-weight: 500;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
                 }
             }
         }
