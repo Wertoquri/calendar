@@ -11,8 +11,10 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Register endpoint
@@ -20,10 +22,19 @@ app.post('/register', async (req, res) => {
     let { login, password, email } = req.body;
     console.log('Register attempt:', { login, email });
     try {
-        let result = await db.query("SELECT * FROM user WHERE login = ? OR email = ?", [login, email]);
-        if (result[0].length > 0) {
-            return res.status(400).json({ error: 'User with this login or email already exists' });
+        // Check if user exists by login OR email
+        let [existingUsers] = await db.query("SELECT id, login, email FROM user WHERE login = ? OR email = ?", [login, email]);
+        
+        if (existingUsers.length > 0) {
+            const existingUser = existingUsers[0];
+            if (existingUser.login === login) {
+                return res.status(400).json({ error: 'User with this login already exists' });
+            }
+            if (existingUser.email === email) {
+                return res.status(400).json({ error: 'User with this email already exists' });
+            }
         }
+        
         let hashedPassword = await bcrypt.hash(password, 10);
         let insertResult = await db.query("INSERT INTO user (login, password, email) VALUES (?, ?, ?)", [login, hashedPassword, email]);
         console.log('User registered:', insertResult[0].insertId);
