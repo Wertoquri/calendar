@@ -18,17 +18,20 @@ app.use(cors({
 // Register endpoint
 app.post('/register', async (req, res) => {
     let { login, password, email } = req.body;
+    console.log('Register attempt:', { login, email });
     try {
         let result = await db.query("SELECT * FROM user WHERE login = ? OR email = ?", [login, email]);
         if (result[0].length > 0) {
             return res.status(400).json({ error: 'User with this login or email already exists' });
         }
         let hashedPassword = await bcrypt.hash(password, 10);
-        await db.query("INSERT INTO user (login, password, email) VALUES (?, ?, ?)", [login, hashedPassword, email]);
+        let insertResult = await db.query("INSERT INTO user (login, password, email) VALUES (?, ?, ?)", [login, hashedPassword, email]);
+        console.log('User registered:', insertResult[0].insertId);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         console.error('Register error:', err);
-        res.status(500).json({ error: err.message || 'Server error' });
+        console.error('Error details:', err.message, err.code, err.sql);
+        res.status(500).json({ error: err.message || 'Server error', code: err.code });
     }
 });
 
