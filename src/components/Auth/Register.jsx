@@ -115,7 +115,7 @@ export default function Register() {
 
                     <button type="submit" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Create Account'} 
-                        <IoPersonAdd />
+                        <IoPersonAdd className="btn-icon" />
                     </button>
                 </form>
             </div>

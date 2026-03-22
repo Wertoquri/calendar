@@ -73,7 +73,7 @@ export default function Login() {
                     
                     <button type="submit" disabled={loading}>
                         {loading ? 'Signing in...' : 'Sign In'} 
-                        <IoLogIn />
+                        <IoLogIn className="btn-icon" />
                     </button>
                 </form>
             </div>

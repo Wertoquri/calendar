@@ -125,7 +125,7 @@
         justify-content: center;
         gap: 0.75rem;
 
-        & svg {
+        & .btn-icon {
             font-size: 1.25rem;
             transition: transform 0.3s ease;
         }
@@ -134,7 +134,7 @@
             transform: translateY(-3px);
             box-shadow: 0 14px 35px rgba(99, 102, 241, 0.45);
 
-            & svg {
+            & .btn-icon {
                 transform: translateX(4px);
             }
         }
@@ -142,7 +142,7 @@
         &:active {
             transform: translateY(-1px);
 
-            & svg {
+            & .btn-icon {
                 transform: translateX(2px);
             }
         }
@@ -153,7 +153,7 @@
             transform: none;
             box-shadow: none;
 
-            & svg {
+            & .btn-icon {
                 transform: none;
             }
         }
