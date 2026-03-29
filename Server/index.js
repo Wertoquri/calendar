@@ -3,6 +3,7 @@ import cors from 'cors';
 import db from './db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 const app = express();
 app.use(express.json());
@@ -68,6 +69,17 @@ const authenticateToken = (req, res, next) => {
 
 app.get("/protected", authenticateToken, (req, res) => {
     res.json({data: req?.user?.id});
+});
+
+
+app.post("/add", authenticateToken, async (req, res) => {
+    console.log(req.body)
+    let user_id = req.user.id;
+    console.log(user_id)
+    await db.query("INSERT INTO `event` (user_id, title, date, time, color) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.title, req.body.date, req.body.time, req.body.color]);
+    let results = await db.query("SELECT * FROM event WHERE user_id = ?", [user_id]);
+    res.json(results[0]);
+
 });
 
 app.listen(3000,()=>console.log(`Server is running on port 3000`));

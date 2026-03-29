@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './components/Header/Header.jsx'
 import Main from './components/Main/Main.jsx'
 import Footer from './components/Footer/Footer.jsx'
@@ -11,7 +11,9 @@ import { uploadTokenFromLocalStorage } from './store/AuthReducer.js';
 
 export default function App() {
   let dispatch = useDispatch();
-  dispatch(uploadTokenFromLocalStorage());
+  useEffect(() => {
+    dispatch(uploadTokenFromLocalStorage());
+  }, [dispatch]);
   let token = useSelector((state) => state.auth.token)
   console.log(token)
   let [modalIsOpen, setModalIsOpen] = useState(false)

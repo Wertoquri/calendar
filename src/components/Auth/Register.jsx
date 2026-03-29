@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
 import { registerUser } from '../../store/AuthReducer';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function Register() {
     const { register, handleSubmit, formState: { errors }, watch } = useForm()

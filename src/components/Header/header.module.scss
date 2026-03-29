@@ -37,4 +37,20 @@
         color: colors.$primary-300;
         text-decoration: none;
     }
+
+    & .logoutBtn {
+        background: none;
+        border: none;
+        color: colors.$text-200;
+        cursor: pointer;
+        font-size: inherit;
+        padding: 0;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            color: colors.$primary-300;
+        }
+    }
 }

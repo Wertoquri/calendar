@@ -9,13 +9,16 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {removeToken} from "../../store/AuthReducer.js"
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 function Header(props) {
     let isAuth = useSelector(state => state.auth.token) != null;
     let dispatch = useDispatch();
+    let navigate = useNavigate();
     let logout = () => {
         dispatch(removeToken());
+        navigate('/login');
     }
 
     return (
@@ -33,12 +36,12 @@ function Header(props) {
                     Day</NavLink>
                 {
                     isAuth ? (
+                        <button onClick={logout} className={style.logoutBtn}>Log out</button>
+                    ) : (
                     <>
                         <NavLink to="/login" className={({ isActive }) => isActive ? style.active : style.link}>Login</NavLink>
                         <NavLink to="/register" className={({ isActive }) => isActive ? style.active : style.link}>Register</NavLink>
                     </>
-                    ) : (
-                        <NavLink>Log out</NavLink>
                    )
                 }
             </nav>
