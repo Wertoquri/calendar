@@ -72,14 +72,100 @@ app.get("/protected", authenticateToken, (req, res) => {
 });
 
 
-app.post("/add", authenticateToken, async (req, res) => {
-    console.log(req.body)
-    let user_id = req.user.id;
-    console.log(user_id)
-    await db.query("INSERT INTO `event` (user_id, title, date, time, color) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.title, req.body.date, req.body.time, req.body.color]);
-    let results = await db.query("SELECT * FROM event WHERE user_id = ?", [user_id]);
-    res.json(results[0]);
-
+// Get all events for authenticated user
+app.get("/events", authenticateToken, async (req, res) => {
+    try {
+        let user_id = req.user.id;
+        let [results] = await db.query("SELECT * FROM events WHERE user_id = ? ORDER BY date ASC", [user_id]);
+        // Format dates to YYYY-MM-DD string
+        const formattedEvents = results.map(event => ({
+            ...event,
+            date: new Date(event.date).toISOString().split('T')[0]
+        }));
+        res.json(formattedEvents);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
-app.listen(3000,()=>console.log(`Server is running on port 3000`));
+// Add new event
+app.post("/add", authenticateToken, async (req, res) => {
+    try {
+        let user_id = req.user.id;
+        const { title, date, time, color } = req.body;
+        console.log('Adding event:', { user_id, title, date, time, color });
+        await db.query(
+            "INSERT INTO `events` (user_id, title, date, time, color) VALUES (?, ?, ?, ?, ?)",
+            [user_id, title, date, time, color || '#6366f1']
+        );
+        let [results] = await db.query("SELECT * FROM events WHERE user_id = ? ORDER BY date ASC", [user_id]);
+        // Format dates to YYYY-MM-DD string
+        const formattedEvents = results.map(event => ({
+            ...event,
+            date: new Date(event.date).toISOString().split('T')[0]
+        }));
+        console.log('Event added successfully');
+        res.json(formattedEvents);
+    } catch (err) {
+        console.error('Error adding event:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Update event
+app.put("/event/:id", authenticateToken, async (req, res) => {
+    try {
+        let user_id = req.user.id;
+        let event_id = req.params.id;
+        const { title, date, time, color } = req.body;
+        
+        // Verify event belongs to user
+        let [existingEvent] = await db.query("SELECT * FROM events WHERE id = ? AND user_id = ?", [event_id, user_id]);
+        if (existingEvent.length === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        
+        await db.query(
+            "UPDATE `events` SET title = ?, date = ?, time = ?, color = ? WHERE id = ? AND user_id = ?",
+            [title, date, time, color, event_id, user_id]
+        );
+        let [results] = await db.query("SELECT * FROM events WHERE user_id = ? ORDER BY date ASC", [user_id]);
+        // Format dates to YYYY-MM-DD string
+        const formattedEvents = results.map(event => ({
+            ...event,
+            date: new Date(event.date).toISOString().split('T')[0]
+        }));
+        res.json(formattedEvents);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Delete event
+app.delete("/event/:id", authenticateToken, async (req, res) => {
+    try {
+        let user_id = req.user.id;
+        let event_id = req.params.id;
+        
+        // Verify event belongs to user
+        let [existingEvent] = await db.query("SELECT * FROM events WHERE id = ? AND user_id = ?", [event_id, user_id]);
+        if (existingEvent.length === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        
+        await db.query("DELETE FROM events WHERE id = ? AND user_id = ?", [event_id, user_id]);
+        let [results] = await db.query("SELECT * FROM events WHERE user_id = ? ORDER BY date ASC", [user_id]);
+        // Format dates to YYYY-MM-DD string
+        const formattedEvents = results.map(event => ({
+            ...event,
+            date: new Date(event.date).toISOString().split('T')[0]
+        }));
+        res.json(formattedEvents);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.listen(3000, () => console.log(`Server is running on port 3000`));

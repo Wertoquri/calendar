@@ -1,24 +1,29 @@
-import { use, useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import style from "./Modal.module.scss"
 import { IoCloseSharp } from "react-icons/io5";
-import { useContext } from 'react'
-import { ContextStore } from '../../store/ContextStore.jsx';
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
-import { addEvent as addNewEvent} from "../../store/EventsReducer.js";
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewEvent, fetchEvents } from "../../store/EventsReducer.js";
 
 
 
 export default function Modal(props) {
     let dispatch = useDispatch();
+    let { loading, error } = useSelector(state => state.events);
 
     let { register, handleSubmit, formState: { errors }, reset } = useForm()
 
-    const submit = (data) => {
-        console.log(data)
-        dispatch(addNewEvent(data))
-        props.open(false)
-        reset()
+    const submit = async (data) => {
+        console.log('Submitting event:', data);
+        await dispatch(addNewEvent(data));
+        await dispatch(fetchEvents());
+        props.open(false);
+        reset({
+            title: '',
+            date: '',
+            time: '',
+            color: '#6366f1'
+        });
     }
 
     return (
@@ -37,10 +42,9 @@ export default function Modal(props) {
                         minLength: 3,
                         maxLength: 40,
                         pattern: {
-                            value: /^[a-zA-Z0-9\s]*$/,
+                            value: /^[a-zA-Z0-9\sа-яА-ЯЇїІіЄєЇЇҐґ]*$/,
                             message: "Only letters, numbers and spaces are allowed"
-                        },
-                        message: "Invalid title"
+                        }
                     })} />
 
                 </section>
@@ -72,7 +76,7 @@ export default function Modal(props) {
                     <label htmlFor="color"> Колір події</label>
                     <input type="color" name='color' id="color" {...register("color"
                         , {
-                            value: "#000000"
+                            value: "#6366f1"
                         }
                     )
 
@@ -84,8 +88,11 @@ export default function Modal(props) {
                         {errors.date?.message}
                         {errors.time?.message}
                     </span>)}
+                    {error && <span className={style.error}>{error}</span>}
                 </section>
-                <button type="submit" >Додати подію</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Додавання...' : 'Додати подію'}
+                </button>
             </form>
 
         </div>

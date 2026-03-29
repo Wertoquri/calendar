@@ -1,7 +1,6 @@
-import React, { useState, useContext, use } from 'react'
+import React, { useState } from 'react'
 import style from "./WCalendar.module.scss"
 import { getCalendarDatesInWeek, getMinutes } from '../../utils/calendar';
-import { ContextStore } from '../../store/ContextStore';
 import {useSelector} from 'react-redux';
 
 export default function WCalendar(props) {
@@ -12,6 +11,14 @@ export default function WCalendar(props) {
     const dates = getCalendarDatesInWeek(year, month, currentDate);
 
     let events = useSelector(state => state.events.events);
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     return (
         <div className={style.wrapper}>
@@ -29,42 +36,34 @@ export default function WCalendar(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-
-                            <tr>
-                                {dates.map((date, index) => (
-                                        <td key={index}>
-                                            <span className={style.number}>
-                                                {date.getUTCDate()}
-
-                                            </span>
-                                            <div className={style.events}>
+                        <tr>
+                            {dates.map((date, index) => {
+                                const dateStr = formatDate(date);
+                                return (
+                                    <td key={index}>
+                                        <span className={style.number}>
+                                            {date.getUTCDate()}
+                                        </span>
+                                        <div className={style.events}>
                                             {
-                                                events.filter((e, i) => e.date == date.toISOString().split("T")[0])
+                                                events.filter((e) => e.date === dateStr)
                                                     .sort((a, b) => getMinutes(a.time) - getMinutes(b.time))
                                                     .map((e, i) => (
                                                         <button key={i} className={style.event}
-                                                            style={{ borderLeftColor: e.color ,
-                                                            borderLeftWidth: "6px"
-                                                            }}
+                                                            style={{ borderLeftColor: e.color, borderLeftWidth: "6px" }}
                                                         >
-                                                           {e.time} - {e.title}
+                                                            {e.time} - {e.title}
                                                         </button>
                                                     ))
-                                                    
-                                                    
                                             }
-                                            </div>
-                                        </td>
-
-                                    ))}
-                            </tr>
-
-                        }
+                                        </div>
+                                    </td>
+                                );
+                            })}
+                        </tr>
                     </tbody>
                 </table>
             </div>
-
         </div>
     )
 }

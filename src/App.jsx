@@ -8,13 +8,22 @@ import StorageProvider from './store/ContextStore.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { uploadTokenFromLocalStorage } from './store/AuthReducer.js';
+import { fetchEvents } from './store/EventsReducer.js';
 
 export default function App() {
   let dispatch = useDispatch();
+  let token = useSelector((state) => state.auth.token)
+  
   useEffect(() => {
     dispatch(uploadTokenFromLocalStorage());
   }, [dispatch]);
-  let token = useSelector((state) => state.auth.token)
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchEvents());
+    }
+  }, [dispatch, token]);
+
   console.log(token)
   let [modalIsOpen, setModalIsOpen] = useState(false)
   return (
